@@ -11,4 +11,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const image = await Image.findById(req.params.id);
+        res.json(image);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;

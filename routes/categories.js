@@ -11,4 +11,13 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:id', async (req, res) => {
+    try {
+        const category = await Category.findById(req.params.id);
+        res.json(category);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;

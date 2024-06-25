@@ -15,6 +15,7 @@ mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
+app.use('/', require('./routes/index'));
 app.use('/cars', require('./routes/cars'));
 app.use('/categories', require('./routes/categories'));
 app.use('/images', require('./routes/images'));
@@ -23,6 +24,7 @@ app.use('/users', require('./routes/users'));
 app.use('/wishlists', require('./routes/wishlists'));
 app.use('/payments', require('./routes/payments'));
 app.use('/orders', require('./routes/orders'));
+app.use('/auth', require('./routes/auth'));
 
 app.listen(port, () => {
     console.log(`Server is running on port ${port}`);
