@@ -18,6 +18,7 @@ const userSchema = new mongoose.Schema({
     phoneNumber: String,
     addresses: [String],
     wishlistId: String,
+    orderIds: [String],
 }, { versionKey: false });
 
 module.exports = mongoose.model('User', userSchema, 'users');

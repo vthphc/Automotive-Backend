@@ -61,4 +61,20 @@ router.put('/addresses', async (req, res) => {
     }
 });
 
+router.put('/orders', async (req, res) => {
+    const { userId, orderId } = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $push: { orderIds: orderId } },
+            { new: true, useFindAndModify: false });
+
+        res.json(user);
+
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;
