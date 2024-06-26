@@ -20,6 +20,22 @@ router.get('/:id', async (req, res) => {
     }
 });
 
+router.post('/', async (req, res) => {
+    const user = new User({
+        username: req.body.username,
+        password: req.body.password,
+        fullName: req.body.fullName,
+        phoneNumber: req.body.phoneNumber,
+        email: req.body.email
+    });
+    try {
+        const savedUser = await user.save();
+        res.json(savedUser);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 router.get('/me', async (req, res) => {
     try {
         const user = await User.findById(req.user.id).select('-password');

@@ -9,7 +9,9 @@ const userSchema = new mongoose.Schema({
     },
     password: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
+        minLengeth: 8
     },
     email: String,
     fullName: String,
@@ -17,20 +19,5 @@ const userSchema = new mongoose.Schema({
     addresses: [String],
     wishlistId: String,
 }, { versionKey: false });
-
-userSchema.pre('save', async function (next) {
-    console.log('Pre-save middleware triggered');
-    try {
-        if (!this.isModified('password')) {
-            return next();
-        }
-        const hashedPassword = await bcrypt.hashSync(this.password, 10);
-        this.password = hashedPassword;
-        return next();
-    } catch (error) {
-        console.error('Error hashing password:', error);
-        return next(error);
-    }
-});
 
 module.exports = mongoose.model('User', userSchema, 'users');

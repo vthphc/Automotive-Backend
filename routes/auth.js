@@ -28,11 +28,17 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
+        console.log("user: ", user);
         if (!user) {
             return res.status(400).json({ message: 'Username not found' });
         }
+        const salt = await bcrypt.genSalt(10);
 
-        user.password = bcrypt.hashSync(user.password, 10);
+        const testHash = await bcrypt.hash(password, salt);
+
+        console.log("input password:", password);
+        console.log("hashed password:", testHash);
+        console.log("database password:", user.password);
         const isPasswordValid = await bcrypt.compare(password, user.password);
 
         if (!isPasswordValid) {
@@ -56,6 +62,30 @@ router.post('/profile', verifyToken, async (req, res) => {
             return res.status(404).json({ message: 'User not found' });
         }
         return res.json(user);
+    } catch (err) {
+        return res.status(500).json({ message: err });
+    }
+});
+
+router.post('/signup', async (req, res) => {
+    const { username, fullName, phoneNumber, email, addresses } = req.body;
+    const password = req.body.password.trim();
+
+    const salt = await bcrypt.genSalt(10);
+
+    try {
+        const user = new User({
+            username,
+            password: bcrypt.hashSync(password, salt),
+            fullName,
+            phoneNumber,
+            email,
+            addresses
+        });
+
+        const savedUser = await user.save();
+        console.log("savedUser's password: ", savedUser.password);
+        return res.json(savedUser);
     } catch (err) {
         return res.status(500).json({ message: err });
     }
