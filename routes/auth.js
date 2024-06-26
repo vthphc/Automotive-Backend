@@ -28,19 +28,11 @@ router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     try {
         const user = await User.findOne({ username });
-        console.log("user: ", user);
         if (!user) {
             return res.status(400).json({ message: 'Username not found' });
         }
-        const salt = await bcrypt.genSalt(10);
 
-        const testHash = await bcrypt.hash(password, salt);
-
-        console.log("input password:", password);
-        console.log("hashed password:", testHash);
-        console.log("database password:", user.password);
         const isPasswordValid = await bcrypt.compare(password, user.password);
-
         if (!isPasswordValid) {
             return res.status(400).json({ message: 'Invalid password' });
         }
@@ -84,7 +76,6 @@ router.post('/signup', async (req, res) => {
         });
 
         const savedUser = await user.save();
-        console.log("savedUser's password: ", savedUser.password);
         return res.json(savedUser);
     } catch (err) {
         return res.status(500).json({ message: err });

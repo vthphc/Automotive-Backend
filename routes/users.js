@@ -45,4 +45,20 @@ router.get('/me', async (req, res) => {
     }
 });
 
+router.put('/addresses', async (req, res) => {
+    const { addressId, userId } = req.body;
+
+    try {
+        const user = await User.findByIdAndUpdate(
+            userId,
+            { $push: { addresses: addressId } },
+            { new: true, useFindAndModify: false });
+
+        res.json(user);
+
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;

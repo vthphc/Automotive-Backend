@@ -21,6 +21,22 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.post('/', async (req, res) => {
+    const address = new Address({
+        userId: req.body.userId,
+        addressLine: req.body.addressLine,
+        city: req.body.city,
+        country: req.body.country,
+    });
+
+    try {
+        const savedAddress = await address.save();
+        res.json(savedAddress);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 router.get('/:addressId', async (req, res) => {
     try {
         const address = await Address.findById(req.params.addressId);
