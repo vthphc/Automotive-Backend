@@ -11,6 +11,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(cors({ origin: 'http://localhost:3000' }));
 
+app.options('*', cors({ origin: 'http://localhost:3000' }));
+
 mongoose.connect('mongodb+srv://thinphcv5:dSj5Z2sitHEySrCL@cluster0.u5rccyd.mongodb.net/automotive?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
