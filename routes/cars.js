@@ -1,7 +1,6 @@
 const express = require('express');
 const router = express.Router();
 const Car = require('../models/cars.js');
-const Category = require('../models/categories.js');
 
 router.get('/', async (req, res) => {
     if (req.query.ids) {

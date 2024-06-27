@@ -46,4 +46,13 @@ router.get('/:addressId', async (req, res) => {
     }
 });
 
+router.delete('/:addressId', async (req, res) => {
+    try {
+        const removedAddress = await Address.findByIdAndDelete(req.params.addressId);
+        res.json(removedAddress);
+    } catch (err) {
+        res.json({ message: err });
+    }
+});
+
 module.exports = router;

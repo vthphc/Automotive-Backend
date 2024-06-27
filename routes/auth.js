@@ -2,6 +2,7 @@ const express = require('express');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const User = require('../models/users.js');
+const Wishlist = require('../models/wishlists.js');
 
 const router = express.Router();
 
@@ -66,13 +67,19 @@ router.post('/signup', async (req, res) => {
     const salt = await bcrypt.genSalt(10);
 
     try {
+        const wishlist = new Wishlist({
+            cars: []
+        });
+        const savedWishlist = await wishlist.save();
+
         const user = new User({
             username,
             password: bcrypt.hashSync(password, salt),
             fullName,
             phoneNumber,
             email,
-            addresses
+            addresses,
+            wishlistId: savedWishlist._id
         });
 
         const savedUser = await user.save();
