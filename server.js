@@ -2,6 +2,10 @@ const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+require('dotenv').config();
+
+const databaseURL = process.env.DB_URL;
+const corsOrigin = process.env.CORS_ORIGIN;
 
 const app = express();
 const port = 5000;
@@ -9,11 +13,11 @@ const port = 5000;
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use(cors({ origin: 'http://localhost:3000' }));
+app.use(cors({ origin: corsOrigin }));
 
-app.options('*', cors({ origin: 'http://localhost:3000' }));
+app.options('*', cors({ origin: corsOrigin }));
 
-mongoose.connect('mongodb+srv://thinphcv5:dSj5Z2sitHEySrCL@cluster0.u5rccyd.mongodb.net/automotive?retryWrites=true&w=majority&appName=Cluster0', { useNewUrlParser: true, useUnifiedTopology: true });
+mongoose.connect(databaseURL, { useNewUrlParser: true, useUnifiedTopology: true });
 mongoose.connection.once('open', () => {
     console.log('Connected to MongoDB');
 });
