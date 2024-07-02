@@ -60,6 +60,28 @@ router.post('/profile', verifyToken, async (req, res) => {
     }
 });
 
+router.put('/profile', verifyToken, async (req, res) => {
+    const { id } = req.user;
+    const { fullName, phoneNumber, email } = req.body.updatedUser;
+
+    try {
+        const user = await User.findByIdAndUpdate(
+            id,
+            { fullName, phoneNumber, email },
+            { new: true, useFindAndModify: false }
+        );
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        return res.json(user);
+    } catch (err) {
+        console.error('Error updating user:', err);
+        return res.status(500).json({ message: 'Internal Server Error' });
+    }
+});
+
 router.post('/signup', async (req, res) => {
     const { username, fullName, phoneNumber, email, addresses } = req.body;
     const password = req.body.password.trim();
